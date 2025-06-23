@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="az.beu.cms.mapper.TeacherMapper">
+    <insert id="addTeacher">
+        insert into teachers (name, surname, middle_name, email, username, department_code, state)
+        values (#{dto.name}, #{dto.surname}, #{dto.middleName}, #{dto.email}, #{dto.username}, #{dto.departmentCode},
+                #{dto.state})
+    </insert>
+
+    <delete id="deleteTeacherByUsername">
+        delete
+        from teachers
+        where username = #{username}
+    </delete>
+
+    <select id="getTeacherByUsername" parameterType="String" resultMap="teacherByUsername">
+        select id, name, surname, middle_name, email, username, department_code, state
+        from teachers where username = #{username}
+    </select>
+
+    <select id="getTeachers" resultType="az.beu.cms.model.teacher.TeacherDto">
+        select id, name, surname, middle_name, email, username, department_code, state
+        from teachers where state != '0'
+    </select>
+
+    <select id="getTeachersByCriteria" resultType="az.beu.cms.model.teacher.TeacherDto">
+        select id, name, surname, middle_name, email, username, department_code, state
+        from teachers where state != '0'
+        <if test="request.name != null">
+            and name = #{request.name}
+        </if>
+        <if test="request.surname != null">
+            and surname = #{request.surname}
+        </if>
+        <if test="request.middleName != null">
+            and middle_name = #{request.middleName}
+        </if>
+        <if test="request.email != null">
+            and email = #{request.email}
+        </if>
+        <if test="request.username != null">
+            and username = #{request.username}
+        </if>
+        <if test="request.departmentCode != null">
+            and department_code = #{request.departmentCode}
+        </if>
+        <if test="request.state != null">
+            and state = #{request.state}
+        </if>
+    </select>
+
+    <resultMap id="teacherByUsername" type="az.beu.cms.model.teacher.TeacherDto">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="surname" column="surname"/>
+        <result property="middleName" column="middle_name"/>
+        <result property="email" column="email"/>
+        <result property="username" column="username"/>
+        <result property="departmentCode" column="department_code"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+</mapper>

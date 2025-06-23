@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/education
+    username: education
+    password: test
+
+mybatis:
+  mapperLocations: classpath:sql/*.xml
+  config-location: classpath:config/mybatis.xml
+  type-handlers-package: az.beu.cms.handler

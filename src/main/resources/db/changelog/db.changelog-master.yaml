@@ -1,0 +1,201 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: elnur.ahmadov
+      changes:
+        - sql:
+            splitStatements: false
+            sql: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+  - changeSet:
+      id: 2
+      author: elnur.ahmadov
+      changes:
+        - createTable:
+            tableName: departments
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: department_name
+                  type: varchar(200)
+              - column:
+                  name: department_code
+                  type: varchar(100)
+                  constraints:
+                    unique: true
+              - column:
+                  name: state
+                  type: varchar(2)
+  - changeSet:
+      id: 3
+      author: elnur.ahmadov
+      changes:
+        - createTable:
+            tableName: teachers
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+              - column:
+                  name: surname
+                  type: varchar(200)
+              - column:
+                  name: middle_name
+                  type: varchar(200)
+              - column:
+                  name: email
+                  type: varchar(100)
+              - column:
+                  name: username
+                  type: varchar(100)
+              - column:
+                  name: department_code
+                  type: varchar(100)
+              - column:
+                  name: state
+                  type: varchar(2)
+        - addForeignKeyConstraint:
+            baseTableName: teachers
+            baseColumnNames: department_code
+            referencedTableName: departments
+            referencedColumnNames: department_code
+            constraintName: fk_course_department
+
+  - changeSet:
+      id: 4
+      author: elnur.ahmadov
+      changes:
+        - createTable:
+            tableName: students
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+              - column:
+                  name: surname
+                  type: varchar(200)
+              - column:
+                  name: middle_name
+                  type: varchar(200)
+              - column:
+                  name: email
+                  type: varchar(100)
+              - column:
+                  name: username
+                  type: varchar(100)
+              - column:
+                  name: department_code
+                  type: varchar(100)
+              - column:
+                  name: class_number
+                  type: varchar(100)
+              - column:
+                  name: state
+                  type: varchar(2)
+        - addForeignKeyConstraint:
+            baseTableName: students
+            baseColumnNames: department_code
+            referencedTableName: departments
+            referencedColumnNames: department_code
+            constraintName: fk_course_department
+
+  - changeSet:
+      id: 5
+      author: elnur.ahmadov
+      changes:
+        - createTable:
+            tableName: courses
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: course_name
+                  type: varchar(200)
+              - column:
+                  name: credits
+                  type: integer
+              - column:
+                  name: course_code
+                  type: integer
+              - column:
+                  name: department_code
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: state
+                  type: varchar(2)
+        - addForeignKeyConstraint:
+            baseTableName: courses
+            baseColumnNames: department_code
+            referencedTableName: departments
+            referencedColumnNames: department_code
+            constraintName: fk_course_department
+
+  - changeSet:
+      id: 6
+      author: elnur.ahmadov
+      changes:
+        - createTable:
+            tableName: student_courses
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: student_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registration_date
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: student_courses
+            baseColumnNames: student_id
+            referencedTableName: students
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_student_courses_student
+        - addForeignKeyConstraint:
+            baseTableName: student_courses
+            baseColumnNames: course_id
+            referencedTableName: courses
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_student_courses_course

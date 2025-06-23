@@ -1,0 +1,3 @@
+<typeHandlers>
+    <typeHandler handler="az.bmu.cms.handler.UUIDTypeHandler"/>
+</typeHandlers>

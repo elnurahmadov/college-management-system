@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="az.beu.cms.mapper.StudentMapper">
+    <insert id="addStudent">
+        insert into students (name, surname, middle_name, email, username, department_code, class_number, state)
+        values (#{dto.name}, #{dto.surname}, #{dto.middleName}, #{dto.email}, #{dto.username}, #{dto.departmentCode},
+                #{dto.classNumber}, #{dto.state})
+    </insert>
+    <insert id="registerStudentToCourse">
+        insert into student_courses (student_id, course_id, registration_date)
+        values (#{dto.studentId}, #{dto.courseId}, #{dto.registrationDate});
+    </insert>
+
+    <delete id="deleteStudentByUsername">
+        delete
+        from students
+        where username = #{username}
+    </delete>
+
+    <select id="getStudentByUsername" parameterType="String" resultMap="studentByUsername">
+        select id, name, surname, middle_name, email, username, department_code, class_number, state
+        from students where username = #{username}
+    </select>
+
+    <select id="getStudents" resultType="az.beu.cms.model.student.StudentDto">
+        select id, name, surname, middle_name, email, username, department_code, class_number, state
+        from students where state != '0'
+    </select>
+
+    <select id="getStudentsByCriteria" resultType="az.beu.cms.model.student.StudentDto">
+        select id, name, surname, middle_name, email, username, department_code, class_number, state
+        from students where state != '0'
+        <if test="request.name != null">
+            and name = #{request.name}
+        </if>
+        <if test="request.surname != null">
+            and surname = #{request.surname}
+        </if>
+        <if test="request.middleName != null">
+            and middle_name = #{request.middleName}
+        </if>
+        <if test="request.email != null">
+            and email = #{request.email}
+        </if>
+        <if test="request.username != null">
+            and username = #{request.username}
+        </if>
+        <if test="request.departmentCode != null">
+            and department_code = #{request.departmentCode}
+        </if>
+        <if test="request.classNumber != null">
+            and class_number = #{request.classNumber}
+        </if>
+        <if test="request.state != null">
+            and state = #{request.state}
+        </if>
+    </select>
+
+    <select id="getStudentsByCourseId" resultMap="StudentsByCourseIdResultMap" resultType="java.util.List">
+        SELECT s.id              AS student_id,
+               s.name,
+               s.surname,
+               s.middle_name,
+               s.email,
+               s.username,
+               s.department_code,
+               s.class_number,
+               s.state           AS s_state,
+               c.id              AS course_id,
+               c.course_name,
+               c.credits,
+               c.course_code,
+               c.department_code AS c_department_code,
+               c.state           AS c_state
+        FROM student_courses sc
+                 JOIN students s ON sc.student_id = s.id
+                 JOIN courses c ON sc.course_id = c.id
+        WHERE s.state = '1'
+          AND c.state = '1'
+          AND c.id = #{courseId}
+    </select>
+
+    <resultMap id="studentByUsername" type="az.beu.cms.model.student.StudentDto">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="surname" column="surname"/>
+        <result property="middleName" column="middle_name"/>
+        <result property="email" column="email"/>
+        <result property="username" column="username"/>
+        <result property="departmentCode" column="department_code"/>
+        <result property="classNumber" column="class_number"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <resultMap id="StudentsByCourseIdResultMap" type="az.beu.cms.model.student.StudentWithCoursesDto">
+        <id property="id" column="student_id"/>
+        <result property="name" column="name"/>
+        <result property="surname" column="surname"/>
+        <result property="middleName" column="middle_name"/>
+        <result property="email" column="email"/>
+        <result property="username" column="username"/>
+        <result property="departmentCode" column="department_code"/>
+        <result property="classNumber" column="class_number"/>
+        <result property="state" column="s_state"/>
+
+        <collection property="courses" ofType="az.beu.cms.model.course.CourseDto">
+            <id property="id" column="course_id"/>
+            <result property="courseName" column="course_name"/>
+            <result property="credits" column="credits"/>
+            <result property="courseCode" column="course_code"/>
+            <result property="departmentCode" column="c_department_code"/>
+            <result property="state" column="c_state"/>
+        </collection>
+    </resultMap>
+
+</mapper>

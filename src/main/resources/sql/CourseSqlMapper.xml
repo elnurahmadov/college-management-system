@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="az.beu.cms.mapper.CourseMapper">
+    <insert id="addCourse">
+        insert into courses (course_name, credits, course_code, department_code, state)
+        values (#{dto.courseName}, #{dto.credits}, #{dto.courseCode}, #{dto.departmentCode}, #{dto.state});
+    </insert>
+    <delete id="deleteCourse">
+        delete
+        from courses
+        where course_code = #{code}
+    </delete>
+</mapper>
