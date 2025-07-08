@@ -199,3 +199,43 @@ databaseChangeLog:
             referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_student_courses_course
+
+  - changeSet:
+      id: 7
+      author: elnur.ahmadov@cybernet.az
+      changes:
+        - createTable:
+            tableName: shedlock
+            columns:
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: lock_until
+                  type: timestamp(3)
+              - column:
+                  name: locked_at
+                  type: timestamp(3)
+              - column:
+                  name: locked_by
+                  type: varchar(255)
+              - column:
+                  name: updated_at
+                  type: date
+                  defaultValueComputed: current_date
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 8
+      author: elnur.ahmadov@cybernet.az
+      changes:
+        - modifyDataType:
+            tableName: shedlock
+            columnName: lock_until
+            newDataType: timestamp with time zone
+        - modifyDataType:
+            tableName: shedlock
+            columnName: locked_at
+            newDataType: timestamp with time zone

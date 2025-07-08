@@ -3,11 +3,27 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/education
+    url: jdbc:postgresql://localhost:5444/education
     username: education
     password: test
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: eelnur020@gmail.com
+    password: wlfu hroy alkb sfxf
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 
 mybatis:
   mapperLocations: classpath:sql/*.xml
   config-location: classpath:config/mybatis.xml
   type-handlers-package: az.beu.cms.handler
+
+logging:
+  level:
+    net:
+      javacrumbs:
+        shedlock=DEBUG:
