@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: spring-education-app
+    depends_on:
+      - education-db
+
+    ports:
+      - "8081:8081"

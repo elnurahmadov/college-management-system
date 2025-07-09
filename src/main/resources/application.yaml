@@ -6,7 +6,10 @@ spring:
     url: jdbc:postgresql://localhost:5444/education
     username: education
     password: test
-
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -15,7 +18,9 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 mybatis:
   mapperLocations: classpath:sql/*.xml
